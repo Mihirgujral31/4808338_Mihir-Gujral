@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+#include <stdlib.h>
+
+void bubbleSort(int arr[], int n) {
+    for (int i=0; i<n-1; i++) {
+        for (int j=0; j<n-i-1; j++) {
+            if (arr[j] > arr[j+1]) {
+                int temp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = temp;
+            }
+        }
+    }
+}
+
+void findZigZagSequence(int arr[], int n) {
+    bubbleSort(arr, n);
+
+    int mid = (n-1)/2;
+
+    int temp = arr[mid];
+    arr[mid] = arr[n-1];
+    arr[n-1] = temp;
+
+    int start = mid + 1;
+    int end = n-2;
+    while (start <= end) {
+        temp = arr[start];
+        arr[start] = arr[end];
+        arr[end] = temp;
+        start++;
+        end--;
+    }
+
+    for (int i = 0; i < n; i++) {
+        if (i > 0) printf(" ");
+        printf("%d", arr[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    int t;
+    scanf("%d", &t);
+
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+        int arr[n];
+        for (int i=0; i<n; i++) {
+            scanf("%d", &arr[i]);
+        }
+        findZigZagSequence(arr, n);
+    }
+
+    return 0;
+}
