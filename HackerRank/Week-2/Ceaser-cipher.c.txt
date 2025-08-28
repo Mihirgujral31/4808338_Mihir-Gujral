@@ -1,0 +1,24 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    int n, k;
+    char s[1000];
+    
+    scanf("%d", &n);        
+    scanf("%s", s);         
+    scanf("%d", &k);        
+    
+    k = k%26; 
+
+    for (int i=0; i<n; i++) {
+        if (isalpha(s[i])) {
+            char base = islower(s[i]) ? 'a' : 'A';
+            s[i] = ((s[i]-base+k) % 26) + base;
+        }
+    }
+    printf("%s\n", s);
+
+    return 0;
+}
