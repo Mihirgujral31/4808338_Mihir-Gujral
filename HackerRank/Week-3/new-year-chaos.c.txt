@@ -1,0 +1,40 @@
+#include <stdio.h>
+
+int main() {
+    int t;
+    scanf("%d", &t);
+
+    while (t--) {
+        int n;
+        scanf("%d", &n);
+
+        int q[n];
+        for (int i = 0; i < n; i++) {
+            scanf("%d", &q[i]);
+        }
+
+        int chaotic = 0;
+        long long bribes = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (q[i] - (i + 1) > 2) {
+                chaotic = 1;
+                break;
+            }
+
+            int start = q[i] - 2;
+            if (start < 0) start = 0;
+
+            for (int j = start; j < i; j++) {
+                if (q[j] > q[i]) bribes++;
+            }
+        }
+
+        if (chaotic)
+            printf("Too chaotic\n");
+        else
+            printf("%lld\n", bribes);
+    }
+
+    return 0;
+}

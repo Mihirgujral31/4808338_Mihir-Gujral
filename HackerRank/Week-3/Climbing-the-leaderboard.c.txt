@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int n;
+    scanf("%d", &n);
+    int *ranked = (int*)malloc(n * sizeof(int));
+    for(int i = 0; i < n; i++) scanf("%d", &ranked[i]);
+
+    int m;
+    scanf("%d", &m);
+    int *player = (int*)malloc(m * sizeof(int));
+    for(int i = 0; i < m; i++) scanf("%d", &player[i]);
+
+    int *unique = (int*)malloc(n * sizeof(int));
+    int u = 0;
+    unique[u++] = ranked[0];
+    for(int i = 1; i < n; i++) {
+        if(ranked[i] != ranked[i-1]) unique[u++] = ranked[i];
+    }
+
+    int idx = u - 1;
+    for(int i = 0; i < m; i++) {
+        while(idx >= 0 && player[i] >= unique[idx]) idx--;
+        printf("%d\n", idx + 2);
+    }
+
+    free(ranked);
+    free(player);
+    free(unique);
+    return 0;
+}
