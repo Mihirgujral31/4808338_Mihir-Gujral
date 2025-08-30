@@ -1,0 +1,69 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MOD 1000000007LL
+
+static long long maxll(long long a, long long b) { return a > b ? a : b; }
+
+static long long mod_pow(long long base, long long exp) {
+    long long res = 1 % MOD;
+    base %= MOD;
+    while (exp > 0) {
+        if (exp & 1) res = (res * base) % MOD;
+        base = (base * base) % MOD;
+        exp >>= 1;
+    }
+    return res;
+}
+
+int main(void) {
+    int t;
+    if (scanf("%d", &t) != 1) return 0;
+
+    int *ns = (int*)malloc(t * sizeof(int));
+    int *ms = (int*)malloc(t * sizeof(int));
+    if (!ns || !ms) return 0;
+
+    int max_m = 0;
+    for (int i = 0; i < t; i++) {
+        scanf("%d %d", &ns[i], &ms[i]);
+        if (ms[i] > max_m) max_m = ms[i];
+    }
+
+    long long *f = (long long*)calloc(max_m + 1, sizeof(long long));
+    f[0] = 1;
+    for (int w = 1; w <= max_m; w++) {
+        long long sum = 0;
+        if (w - 1 >= 0) sum = (sum + f[w - 1]) % MOD;
+        if (w - 2 >= 0) sum = (sum + f[w - 2]) % MOD;
+        if (w - 3 >= 0) sum = (sum + f[w - 3]) % MOD;
+        if (w - 4 >= 0) sum = (sum + f[w - 4]) % MOD;
+        f[w] = sum;
+    }
+
+    long long *g = (long long*)malloc((max_m + 1) * sizeof(long long));
+    long long *solid = (long long*)malloc((max_m + 1) * sizeof(long long));
+
+    for (int tc = 0; tc < t; tc++) {
+        int n = ns[tc], m = ms[tc];
+
+        g[0] = 1;
+        for (int w = 1; w <= m; w++) g[w] = mod_pow(f[w], n);
+
+        for (int w = 1; w <= m; w++) {
+            long long bad = 0;
+            for (int i = 1; i <= w - 1; i++) {
+                bad = (bad + (solid[i] * g[w - i]) % MOD) % MOD;
+            }
+            long long val = (g[w] - bad) % MOD;
+            if (val < 0) val += MOD;
+            solid[w] = val;
+        }
+
+        printf("%lld\n", solid[m]);
+    }
+
+    free(ns); free(ms);
+    free(f); free(g); free(solid);
+    return 0;
+}
